@@ -1,5 +1,6 @@
 const inquirer = require("inquirer");
-const fs = require("fs").promises;
+
+const { readPassword } = require("./lib/passwords");
 
 const {
   askStartQuestions,
@@ -16,9 +17,8 @@ async function main() {
     if (task === CHOICE_GET) {
       const { key } = await askGetQuestions();
       try {
-        const passwordJSON = await fs.readFile("./password.json", "utf-8");
-        const passwords = JSON.parse(passwordJSON);
-        console.log(`Your ${key} password is ${passwords[key]}`);
+        const password = await readPassword(key);
+        console.log(`Your ${key} password is ${password}`);
       } catch (error) {
         console.error("Something went wrong");
       }
