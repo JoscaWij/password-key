@@ -1,5 +1,5 @@
 const inquirer = require("inquirer");
-const fs = require("fs");
+const fs = require("fs").promises;
 
 const questions = [
   {
@@ -17,16 +17,17 @@ const questions = [
 inquirer.prompt(questions).then((answers) => {
   if (answers.password === "123") {
     console.log("Answer is correct!");
-    console.log(`You like to know the password of ${answers.key}?`);
+    console.log(`The password of ${answers.key}:`);
   } else {
     console.log("Answer is incorrect!");
   }
 
-  try {
-    const data = fs.readFileSync("./password.json", "utf8");
+  fs.readFile("./password.json", "utf8", (err, data) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
     let passwords = JSON.parse(data);
     console.log(passwords[answers.key]);
-  } catch (err) {
-    console.error(err);
-  }
+  });
 });
