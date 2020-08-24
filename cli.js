@@ -30,20 +30,3 @@ inquirer.prompt(questions).then((answers) => {
     console.error(err);
   }
 });
-
-/* const readline = require("readline");
-
-const interface = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-
-interface.question(`What's your name?`, (name) => {
-  console.log(`Hi ${name}!`);
-  interface.question(`What's your password?`, password => {
-    console.log(`Thanks for logging in! Password: ${password}`);
-    interface.close();
-  })
-});
- */
