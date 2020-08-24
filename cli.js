@@ -14,20 +14,17 @@ const questions = [
   },
 ];
 
-inquirer.prompt(questions).then((answers) => {
+inquirer.prompt(questions).then(async (answers) => {
   if (answers.password === "123") {
-    console.log("Answer is correct!");
-  } else {
-    console.log("Answer is incorrect!");
-  }
-  console.log(`The password of ${answers.key}:`);
-
-  fs.readFile("./password.json", "utf8", (err, data) => {
-    if (err) {
-      console.error(err);
-      return;
+    console.log("Master password is correct!");
+    try {
+      const passwordJSON = await fs.readFile("./password.json", "utf-8");
+      const passwords = JSON.parse(passwordJSON);
+      console.log(`Your ${answers.key} password is ${passwords[answers.key]}`);
+    } catch (error) {
+      console.error("Something went wrong");
     }
-    let passwords = JSON.parse(data);
-    console.log(passwords[answers.key]);
-  });
+  } else {
+    console.log("Master password is incorrect!");
+  }
 });
