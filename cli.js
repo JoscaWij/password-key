@@ -20,13 +20,15 @@ async function main() {
       const { key } = await askGetQuestions();
       try {
         const password = await readPassword(key);
-        console.log(`Your ${key} password is ${password}`);
+        const dycriptedPassword = decrypt(password, masterPassword);
+        console.log(`Your ${key} password is ${dycriptedPassword}`);
       } catch (error) {
         console.error("Something went wrong");
       }
     } else if (task === CHOICE_SET) {
       const { service, newpassword } = await askSetQuestions();
-      await writePassword(service, newpassword);
+      const encryptedPassword = encrypt(newpassword, masterPassword);
+      await writePassword(service, encryptedPassword);
       console.log(`New Password for ${service} set`);
     } else {
       console.log("Master Password is incorrect!");
