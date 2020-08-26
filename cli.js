@@ -22,14 +22,15 @@ async function main() {
   const originalMasterPassword = await readMasterPassword();
   if (!originalMasterPassword) {
     const { newMasterPassword } = await askForNewMasterPassword();
-    await writeMasterPassword(newMasterPassword);
+    const encrypedMasterPassword = createHash(newMasterPassword);
+    await writeMasterPassword(encrypedMasterPassword);
     console.log("Master Password set!");
     return;
   }
 
   const { masterPassword, task } = await askStartQuestions();
 
-  if (masterPassword !== originalMasterPassword) {
+  if (!verifyHash(masterPassword, originalMasterPassword)) {
     console.log("Master Password is incorrect!");
     return;
   }
