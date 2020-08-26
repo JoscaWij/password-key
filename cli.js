@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 
-const { readPassword } = require("./lib/passwords");
+const { readPassword, writePassword } = require("./lib/passwords");
 
 const {
   askStartQuestions,
@@ -9,6 +9,8 @@ const {
   CHOICE_GET,
   CHOICE_SET,
 } = require("./lib/questions");
+
+const { encrypt, decrypt, createHash, verifyHash } = require("./lib/crypto");
 
 async function main() {
   const { masterPassword, task } = await askStartQuestions();
@@ -24,7 +26,8 @@ async function main() {
       }
     } else if (task === CHOICE_SET) {
       const { service, newpassword } = await askSetQuestions();
-      console.log(`New Password for ${service} = ${newpassword}`);
+      await writePassword(service, newpassword);
+      console.log(`New Password for ${service} set`);
     } else {
       console.log("Master Password is incorrect!");
     }
