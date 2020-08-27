@@ -1,4 +1,4 @@
-const inquirer = require("inquirer");
+require("dotenv").config();
 
 const {
   readPassword,
@@ -19,14 +19,13 @@ const {
 const { encrypt, decrypt, createHash, verifyHash } = require("./lib/crypto");
 
 const { MongoClient } = require("mongodb");
-const uri =
-  "mongodb+srv://JoscaWij:%23Development%232020@development.2unwm.mongodb.net?retryWrites=true&w=majority";
-const client = new MongoClient(uri);
+
+const client = new MongoClient(process.env.MONGO_URI);
 
 async function main() {
   try {
     await client.connect();
-    const database = client.db("password_key");
+    const database = client.db(process.env.MONGO_DB_NAME);
 
     const originalMasterPassword = await readMasterPassword();
     if (!originalMasterPassword) {
