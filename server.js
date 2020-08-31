@@ -12,7 +12,9 @@ const { decrypt, encrypt } = require("./lib/crypto");
 const port = 3000;
 const app = express();
 
-const client = new MongoClient(process.env.MONGO_URI);
+const client = new MongoClient(process.env.MONGO_URI, {
+  useUnifiedTopology: true,
+});
 
 const masterPassword = process.env.MASTER_PASSWORD;
 
