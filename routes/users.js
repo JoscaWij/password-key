@@ -11,10 +11,12 @@ function createUserRouter(database) {
     try {
       const { username } = request.params;
       const user = await collection.findOne({
-        username: username,
+        username,
       });
       if (!user) {
-        response.status(404).send(`No user with name ${username}`);
+        response
+          .status(401)
+          .send(`No user with name ${username} found. Wrong name or password`);
       } else {
         response.send(`User ${username} found`);
         console.log(user);
