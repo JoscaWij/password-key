@@ -11,6 +11,7 @@ const {
 const { decrypt, encrypt } = require("./lib/crypto");
 
 const { createPasswordsRouter } = require("./routes/passwords");
+const { createUserRouter } = require("./routes/users");
 
 const port = 3000;
 const app = express();
@@ -39,6 +40,7 @@ async function server() {
   });
 
   app.use("/api/passwords", createPasswordsRouter(database, masterPassword));
+  app.use("/user/log-in", createUserRouter());
 }
 
 app.listen(port, () => {
