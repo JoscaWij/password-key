@@ -35,9 +35,9 @@ async function server() {
     next();
   });
 
-  app.use('/api/passwords', createPasswordsRouter(database, masterPassword))
+  app.use("/api/passwords", createPasswordsRouter(database, masterPassword));
 
-/*   app.get("/api/passwords/:name", async (request, response) => {
+  /*   app.get("/api/passwords/:name", async (request, response) => {
     try {
       const { name } = request.params;
       const encryptedPassword = await readPassword(name, database);
@@ -69,8 +69,8 @@ async function server() {
       console.log("Couldn't get data from MongoDB. To much data"),
         console.error(error);
     }
-  });
-} */
+  }); */
+}
 
 app.listen(port, () => {
   console.log(`listening on ${port}`);
