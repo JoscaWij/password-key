@@ -4,12 +4,15 @@ const { decrypt, encrypt } = require("../lib/crypto");
 
 const app = express();
 const router = express.Router();
+const bodyParser = require("body-parser");
 
 function createPasswordsRouter(database, masterPassword) {
   router.use(function (request, response, next) {
     console.log("Router active");
     next();
   });
+
+  router.use(bodyParser.json());
 
   router.get("/:name", async (request, response) => {
     try {
