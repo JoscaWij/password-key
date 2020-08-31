@@ -1,5 +1,6 @@
 const MongoClient = require("mongodb").MongoClient;
 require("dotenv").config();
+const cookieParser = require("cookie-parser");
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -33,6 +34,7 @@ async function server() {
   const database = client.db(process.env.MONGO_DB_NAME);
 
   app.use(bodyParser.json());
+  app.use(cookieParser());
 
   app.use((request, response, next) => {
     console.log(`Request ${request.method} on ${request.url}`);
