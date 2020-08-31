@@ -30,6 +30,11 @@ async function server() {
 
   app.use(bodyParser.json());
 
+  app.use((request, response, next) => {
+    console.log(`Request ${request.method} on ${request.url}`);
+    next();
+  });
+
   app.get("/api/passwords/:name", async (request, response) => {
     try {
       const { name } = request.params;
