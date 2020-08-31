@@ -40,7 +40,7 @@ async function server() {
   });
 
   app.use("/api/passwords", createPasswordsRouter(database, masterPassword));
-  app.use("/user", createUserRouter(database));
+  app.use("/api/users", createUserRouter(database));
 }
 
 app.listen(port, () => {
