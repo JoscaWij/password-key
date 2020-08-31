@@ -9,7 +9,24 @@ function createUserRouter(database) {
     next();
   });
 
-  router.get;
+  router.get("/log-in/:username", async (request, response) => {
+    try {
+      const { username } = request.params;
+      const collection = database.collection("users");
+      const user = await collection.findOne({
+        username: username,
+      });
+      if (!user) {
+        response.send(`No user with name ${username}`);
+      }
+      if (user) {
+        response.send(`User ${username} found`), console.log(user);
+      }
+    } catch (error) {
+      response.status(500).send("Error. Please try again later");
+      console.error(error);
+    }
+  });
 
   return router;
 }
