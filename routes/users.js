@@ -2,6 +2,7 @@ const express = require("express");
 
 const app = express();
 const router = express.Router();
+const bodyParser = require("body-parser");
 
 function createUserRouter(database) {
   router.use(function (request, response, next) {
@@ -9,10 +10,13 @@ function createUserRouter(database) {
     next();
   });
 
+  router.use(bodyParser.json());
+
+  const collection = database.collection("users");
+
   router.get("/log-in/:username", async (request, response) => {
     try {
       const { username } = request.params;
-      const collection = database.collection("users");
       const user = await collection.findOne({
         username: username,
       });
@@ -25,6 +29,19 @@ function createUserRouter(database) {
     } catch (error) {
       response.status(500).send("Error. Please try again later");
       console.error(error);
+    }
+  });
+
+  router.post("/log-in", async (request, response) => {
+    try {
+      const { username, password } = request.body;
+      collection.insertOne({
+        username,
+        password,
+      });
+      response.status(201).send(`User ${username} created`);
+    } catch (error) {
+      response.status(500).send("Error");
     }
   });
 
