@@ -18,10 +18,10 @@ function createPasswordsRouter(database, masterPassword) {
     try {
       const { authToken } = request.cookies;
       const { username } = jwt.verify(authToken, process.env.TOKEN_SECRET);
-      console.log(`Authorization ${username}: success`);
+      response.status(200).send(`Authorization ${username}: success`);
       next();
     } catch (error) {
-      console.log("Authorization failed");
+      response.status(403).send("Authorization failed");
       return;
     }
   });
