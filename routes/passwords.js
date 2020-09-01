@@ -18,10 +18,10 @@ function createPasswordsRouter(database, masterPassword) {
     try {
       const { authToken } = request.cookies;
       const { username } = jwt.verify(authToken, process.env.TOKEN_SECRET);
-      response.status(200).send(`Authorization ${username}: success`);
+      console.log(`Authorization ${username}: success`);
       next();
     } catch (error) {
-      response.status(403).send("Authorization failed");
+      response.status(401).send("Access denied");
       return;
     }
   });
