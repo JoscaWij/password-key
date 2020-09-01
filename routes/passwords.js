@@ -1,5 +1,9 @@
 const express = require("express");
-const { readPassword, writePassword } = require("../lib/passwords");
+const {
+  readPassword,
+  writePassword,
+  updatePassword,
+} = require("../lib/passwords");
 const { decrypt, encrypt } = require("../lib/crypto");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
@@ -30,6 +34,18 @@ function createPasswordsRouter(database, masterPassword) {
       response.send(password);
     } catch (error) {
       console.log("Couldn't get data from MongoDB"), console.error(error);
+    }
+  });
+
+  router.patch("/:name", async (request, response) => {
+    try {
+      const { name } = request.params;
+      const { newName, value } = request.body;
+      const encryptedPassword = encrypt(value, masterPassword);
+      await updatePassword(name, newName, encryptedPassword, database);
+      response.status(201).send("Password updated");
+    } catch (error) {
+      response.status(400).send("Couldn't update password");
     }
   });
 
