@@ -10,6 +10,18 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
 function createPasswordsRouter(database, masterPassword) {
+  router.use((request, response, next) => {
+    try {
+      const { authToken } = request.cookies;
+      const { username } = jwt.verify(authToken, process.env.TOKEN_SECRET);
+      console.log(`Authorization ${username}: success`);
+      next();
+    } catch (error) {
+      console.log("Authorization failed");
+      return;
+    }
+  });
+
   router.get("/:name", async (request, response) => {
     try {
       const { name } = request.params;
