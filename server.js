@@ -1,5 +1,6 @@
 const MongoClient = require("mongodb").MongoClient;
 require("dotenv").config();
+const cookieParser = require("cookie-parser");
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -11,6 +12,7 @@ const {
 const { decrypt, encrypt } = require("./lib/crypto");
 
 const { createPasswordsRouter } = require("./routes/passwords");
+const { createUserRouter } = require("./routes/users");
 
 const port = 3000;
 const app = express();
@@ -32,6 +34,7 @@ async function server() {
   const database = client.db(process.env.MONGO_DB_NAME);
 
   app.use(bodyParser.json());
+  app.use(cookieParser());
 
   app.use((request, response, next) => {
     console.log(`Request ${request.method} on ${request.url}`);
@@ -39,6 +42,7 @@ async function server() {
   });
 
   app.use("/api/passwords", createPasswordsRouter(database, masterPassword));
+  app.use("/api/users", createUserRouter(database));
 }
 
 app.listen(port, () => {

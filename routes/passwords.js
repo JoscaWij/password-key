@@ -1,21 +1,20 @@
 const express = require("express");
 const { readPassword, writePassword } = require("../lib/passwords");
 const { decrypt, encrypt } = require("../lib/crypto");
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
 const app = express();
 const router = express.Router();
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
 function createPasswordsRouter(database, masterPassword) {
-  router.use(function (request, response, next) {
-    console.log("Router active");
-    next();
-  });
-
-  router.use(bodyParser.json());
-
   router.get("/:name", async (request, response) => {
     try {
+      const { authToken } = request.cookies;
+      const { username } = jwt.verify(authToken, process.env.TOKEN_SECRET);
+      console.log(username);
       const { name } = request.params;
       const encryptedPassword = await readPassword(name, database);
       const password = decrypt(encryptedPassword, masterPassword);
