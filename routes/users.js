@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 function createUserRouter(database) {
   const collection = database.collection("users");
