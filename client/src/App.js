@@ -44,7 +44,7 @@ function App() {
         />
       </label>
       <button onClick={() => fetchPassword(passwordName)}>Get password</button>
-      <span>{passwordValue}</span>
+      <div>Your password is: {passwordValue}</div>
     </div>
   );
 }
