@@ -14,7 +14,7 @@ const { decrypt, encrypt } = require("./lib/crypto");
 const { createPasswordsRouter } = require("./routes/passwords");
 const { createUserRouter } = require("./routes/users");
 
-const port = 3000;
+const port = 3333;
 const app = express();
 
 const client = new MongoClient(process.env.MONGO_URI, {
