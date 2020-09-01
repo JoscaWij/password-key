@@ -12,9 +12,6 @@ const cookieParser = require("cookie-parser");
 function createPasswordsRouter(database, masterPassword) {
   router.get("/:name", async (request, response) => {
     try {
-      const { authToken } = request.cookies;
-      const { username } = jwt.verify(authToken, process.env.TOKEN_SECRET);
-      console.log(username);
       const { name } = request.params;
       const encryptedPassword = await readPassword(name, database);
       const password = decrypt(encryptedPassword, masterPassword);
@@ -24,9 +21,16 @@ function createPasswordsRouter(database, masterPassword) {
     }
   });
 
-  app.post("/", async (request, response) => {
+  router.post("/", async (request, response) => {
     try {
       const { name, value } = request.body;
+
+      const password = await readPassword(name, database);
+      console.log(password);
+      if (password) {
+        return response.status(403).send("Password is already set");
+      }
+
       const encryptedPassword = encrypt(value, masterPassword);
       await writePassword(name, encryptedPassword, database);
       response.send(`New password for ${name} set`);
