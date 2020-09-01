@@ -40,12 +40,19 @@ function createPasswordsRouter(database, masterPassword) {
   router.patch("/:name", async (request, response) => {
     try {
       const { name } = request.params;
-      const { newName, value } = request.body;
-      const encryptedPassword = encrypt(value, masterPassword);
-      await updatePassword(name, newName, encryptedPassword, database);
-      response.status(201).send("Password updated");
+
+      const password = await readPassword(name, database);
+      if (!password) {
+        return response.status(404).send("Password doesn't exist");
+      }
+      const { name: newName, value: newValue } = request.body;
+      await updatePassword(
+        newName || name,
+        newValue ? encrypt(newValue, masterPassword) : password
+      );
+      response.status(201).send("Updated");
     } catch (error) {
-      response.status(400).send("Couldn't update password");
+      response.status(500).send(error.message);
     }
   });
 
@@ -54,7 +61,6 @@ function createPasswordsRouter(database, masterPassword) {
       const { name, value } = request.body;
 
       const password = await readPassword(name, database);
-      console.log(password);
       if (password) {
         return response.status(403).send("Password is already set");
       }
